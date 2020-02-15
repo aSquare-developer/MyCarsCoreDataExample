@@ -28,6 +28,8 @@
 		359705B91C0829ED00D13FE9 /* data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = data.plist; sourceTree = "<group>"; };
 		35F2F4DF1C084725000E1CB3 /* MyCars.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyCars.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7575884F23F796B30059E963 /* MyCars.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyCars.xcdatamodel; sourceTree = "<group>"; };
+		7575885123F799B10059E963 /* Car+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Car+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7575885223F799B10059E963 /* Car+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Car+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,8 @@
 				359705B91C0829ED00D13FE9 /* data.plist */,
 				359705AF1C08159E00D13FE9 /* Info.plist */,
 				7575884E23F796B30059E963 /* MyCars.xcdatamodeld */,
+				7575885123F799B10059E963 /* Car+CoreDataClass.swift */,
+				7575885223F799B10059E963 /* Car+CoreDataProperties.swift */,
 			);
 			path = MyCars;
 			sourceTree = "<group>";
