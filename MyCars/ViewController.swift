@@ -147,11 +147,58 @@ class ViewController: UIViewController {
     }
     
     @IBAction func startEnginePressed(_ sender: UIButton) {
+        let timesDriven = Int(selectedCar.timesDriven)
+        selectedCar.timesDriven = Int16(timesDriven + 1)
+        selectedCar.lastStarted = Date()
         
+        do {
+            try context.save()
+            insertDataFrom(selectedCar: selectedCar)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     @IBAction func rateItPressed(_ sender: UIButton) {
         
+        /* Создаём Alert Controller */
+        let ac = UIAlertController(title: "Rate it", message: "Rate this car please", preferredStyle: .alert)
+        
+        /* Создаёт кнопку ОК для нашего Alert Controller'a */
+        let ok = UIAlertAction(title: "OK", style: .default) { action in
+            let textField = ac.textFields?[0]
+            self.update(rating: textField!.text!)
+        }
+        
+        /* Создаёт кнопку Cancel для нашего Alert Controller'a */
+        let cancel = UIAlertAction(title: "Cancel", style: .default)
+        
+        /* Добавляем в наш Alert Controller текстовое поле и изменяем его тип, чтобы можно было вводить только цифры */
+        ac.addTextField { textField in
+            textField.keyboardType = .numberPad
+        }
+        
+        ac.addAction(ok) /* Добавляем в наш Alert Controller кнопку ОК */
+        ac.addAction(cancel) /* Добавляем в наш Alert Controller кнопку Cancel */
+        present(ac, animated: true) /* Презентуем наш Alert Controller при нажатии на кнопку Rate it */
+        
+    }
+    
+    func update(rating: String) {
+        selectedCar.rating = Double(rating)!
+        
+        do {
+            try context.save()
+            insertDataFrom(selectedCar: selectedCar)
+        } catch {
+            
+            let ac = UIAlertController(title: "Wrong value", message: "Value must be 1 to 10", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .default)
+            ac.addAction(ok)
+            present(ac, animated: true, completion: nil)
+            
+            print(error.localizedDescription)
+        }
     }
 }
 
