@@ -12,6 +12,7 @@ import CoreData
 class ViewController: UIViewController {
     
     var context: NSManagedObjectContext!
+    var selectedCar: Car!
     
     //  lazy var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -27,13 +28,47 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        /* Проверка данных в базе при загрзуке приложения */
+        getDataFromFile()
+        
+        let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
+        let mark = segmentedControl.titleForSegment(at: 0)
+        //print("mark: \(mark)")
+        fetchRequest.predicate = NSPredicate(format: "mark == %@", mark!)
+        
+        do {
+            let results = try context.fetch(fetchRequest)
+            // print("result: \(results)")
+            selectedCar = results[0]
+            insertDataFrom(selectedCar: selectedCar)
+        } catch {
+            print(error.localizedDescription)
+        }
         
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func insertDataFrom(selectedCar: Car) {
+        
+        carImageView.image = UIImage(data: selectedCar.imagesData!)
+        markLabel.text = selectedCar.mark
+        modelLabel.text = selectedCar.model
+        myChoiceImageView.isHidden = !(selectedCar.myChoice.self)
+        ratingLabel.text = "Rating: \(selectedCar.rating)"
+        numberOfTripsLabel.text = "Number of trips: \(selectedCar.timesDriven)"
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .none
+        lastTimeStartedLabel.text = "Last time started: \(dateFormatter.string(from: selectedCar.lastStarted! as Date))"
+        //segmentedControl.tintColor = selectedCar.tintColor as? UIColor
+        segmentedControl.backgroundColor = selectedCar.tintColor as? UIColor
+        segmentedControl.selectedSegmentTintColor = selectedCar.tintColor as? UIColor
     }
     
     func getDataFromFile() {
@@ -78,11 +113,11 @@ class ViewController: UIViewController {
             car.lastStarted = carDictionary["lastStarted"] as? Date
             car.timesDriven = carDictionary["timesDriven"] as! Int16
             car.myChoice = carDictionary["myChoice"] as! Bool
-            car.imagesData = carDictionary["imageData"] as? Data
-//            let imageName = carDictionary["imageName"] as? String
-//            let image = UIImage(named: imageName!)
-//            let imageData = image!.pngData()
-//            car.imagesData = imageData as NSData?
+            
+            let imageName = carDictionary["imageName"] as? String
+            let image = UIImage(named: imageName!)
+            let imageData = image!.pngData()
+            car.imagesData = imageData as Data?
             
             /*
                 Обрабатываем цвет, он храниться как словарь,
