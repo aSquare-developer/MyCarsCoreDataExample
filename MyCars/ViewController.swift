@@ -34,12 +34,10 @@ class ViewController: UIViewController {
         
         let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
         let mark = segmentedControl.titleForSegment(at: 0)
-        //print("mark: \(mark)")
         fetchRequest.predicate = NSPredicate(format: "mark == %@", mark!)
         
         do {
             let results = try context.fetch(fetchRequest)
-            // print("result: \(results)")
             selectedCar = results[0]
             insertDataFrom(selectedCar: selectedCar)
         } catch {
@@ -67,7 +65,7 @@ class ViewController: UIViewController {
         dateFormatter.timeStyle = .none
         lastTimeStartedLabel.text = "Last time started: \(dateFormatter.string(from: selectedCar.lastStarted! as Date))"
         //segmentedControl.tintColor = selectedCar.tintColor as? UIColor
-        segmentedControl.backgroundColor = selectedCar.tintColor as? UIColor
+        //segmentedControl.backgroundColor = selectedCar.tintColor as? UIColor
         segmentedControl.selectedSegmentTintColor = selectedCar.tintColor as? UIColor
     }
     
@@ -143,6 +141,25 @@ class ViewController: UIViewController {
     }
     
     @IBAction func segmentedCtrlPressed(_ sender: UISegmentedControl) {
+        
+        /* Получаем марку нашего автомобиля */
+        let mark = sender.titleForSegment(at: sender.selectedSegmentIndex)
+        
+        /* Создаём запрос и выполняем его */
+        let fetchRequest: NSFetchRequest<Car> = Car.fetchRequest()
+        
+        /* Указываем в каком формате вернуть запрос. */
+        fetchRequest.predicate = NSPredicate(format: "mark == %@", mark!)
+        
+        /* Делаем наш запрос */
+        do {
+            let results = try context.fetch(fetchRequest)
+            selectedCar = results[0]
+            insertDataFrom(selectedCar: selectedCar)
+        } catch {
+            print(error.localizedDescription)
+        }
+        
         
     }
     
